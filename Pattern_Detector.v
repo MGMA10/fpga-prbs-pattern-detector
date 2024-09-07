@@ -18,49 +18,59 @@ module Pattern_Detector (
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
            current_state <= IDLE;
+           next_state <= IDLE;
             pattern_counter  <= 0;
             pattern_found <= 0;
+            byte_counter <=0;
         end else begin
            current_state <= next_state;
-            case (current_state)
-                IDLE:  begin
-                    if (data_in == pattern[7:0]) begin
-                        pattern_counter  <= 1;
-                        byte_counter=1;
-                        next_state <= MATCHING;
-                    end
-                end
-                MATCHING:  begin
-                    if (data_in == pattern[7:0] && byte_counter == 0) begin
-                        byte_counter=byte_counter+1;
-                    end
-                    else if (data_in == pattern[15:8] && byte_counter == 1) begin
-                        byte_counter=byte_counter+1;
-                    end
-                    else if (data_in == pattern[23:16] && byte_counter == 2) begin
-                        byte_counter=byte_counter+1;
-                    end
-                    else if (data_in == pattern[31:24] && byte_counter == 3) begin
-                        byte_counter=0;
-                        pattern_counter  <= pattern_counter  + 1;
-                        if (pattern_counter  == n_repeats) 
-                        begin
-                            pattern_found <= 1;
-                            next_state <= FOUND;
-                        end
-                    end
-                    else begin
-                        pattern_counter  <= 0;
-                        next_state <= IDLE;
-                    end
-                        
-                        
-                    
-                end
-                FOUND: begin
-                    pattern_found <= 1;
-                end
-            endcase
         end
     end
+
+always @(*) begin
+    case (current_state)
+        IDLE:  begin
+            if (data_in == pattern[31:24]) begin
+                pattern_counter  = 1;
+                byte_counter=1;
+                next_state = MATCHING;
+            end
+            else begin
+            next_state = IDLE;
+            pattern_counter  = 0;
+            byte_counter =0;
+            end
+        end
+        MATCHING:  begin
+            if (data_in == pattern[31:24] && byte_counter == 0) begin
+                byte_counter =byte_counter+1;
+            end
+            else if (data_in == pattern[23:16] && byte_counter == 1) begin
+                byte_counter =byte_counter+1;
+            end
+            else if (data_in == pattern[15:8] && byte_counter == 2) begin
+                byte_counter =byte_counter+1;
+            end
+            else if (data_in == pattern[7:0] && byte_counter == 3) begin
+                byte_counter =0;
+                pattern_counter   = pattern_counter  + 1;
+                if (pattern_counter  > n_repeats) 
+                begin
+                    pattern_found  = 1;
+                    next_state  = FOUND;
+                end
+            end
+            else begin
+                pattern_counter = 0;
+                next_state = IDLE;
+            end
+ 
+        end
+        FOUND: begin
+            pattern_found = 1;
+        end
+        default:next_state = IDLE;
+    endcase
+end
+
 endmodule

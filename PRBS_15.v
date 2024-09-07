@@ -6,10 +6,11 @@ module PRBS_15 (
     output reg [7:0] prbs_out     
 );
 
-  reg [7:0] pattern_counter;  
-  reg [1:0] byte_counter;
+    reg [7:0] pattern_counter;  
+    reg [1:0] byte_counter;
+
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) 
+        if (!rst_n || n_repeats == 0) 
             begin
             prbs_out <= 8'hFF;
             pattern_counter <= 0;
@@ -21,20 +22,32 @@ module PRBS_15 (
                 if(pattern_counter < n_repeats)
                 begin
                     case (byte_counter)
-                        0: prbs_out <= pattern_in[7:0];
-                        1:prbs_out <= pattern_in[15:8];
-                        2:prbs_out <= pattern_in[23:16];
-                        3:prbs_out <= pattern_in[31:24];
+                        0: prbs_out <= pattern_in[31:24];
+                        1:prbs_out <= pattern_in[23:16];
+                        2:prbs_out <= pattern_in[15:8];
+                        3:prbs_out <= pattern_in[7:0];
                         default: prbs_out <= 8'hFF;
                     endcase
-                    if (pattern_counter < 3)
-                    pattern_counter<=pattern_counter+1;
+                    if (byte_counter < 2'b11)
+                        byte_counter<=byte_counter+1;
                     else
-                    pattern_counter <= 0;               
-                    
+                        begin
+                        byte_counter <= 2'b00;
+                        pattern_counter <= pattern_counter+1;               
+                        end
                 end
                 else
-            prbs_out <= {prbs_out[6:0],pattern_in[13]^pattern_in[14]};
+                if (byte_counter < 2'b11) begin
+                    prbs_out <= {prbs_out[6:0],pattern_in[13]^pattern_in[14]};
+                    byte_counter <= byte_counter+1;
+                end
+                else
+                begin
+                    byte_counter <= 0;
+                    pattern_counter <= 0;
+                end
+
+            
     end
 end
 
