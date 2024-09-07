@@ -11,7 +11,6 @@ This project involves the design of a Pseudo-Random Binary Sequence (PRBS-15) ge
     - [Pattern Detector](#pattern-detector)
     - [Top Module](#top-module)
 - [Testbenches](#testbenches)
-- [Download](#Download)
 
 ## Project Description
 
@@ -49,6 +48,11 @@ This module generates a pseudo-random binary sequence using a custom PRBS-15 equ
 - **pattern_in**: 32-bit input pattern.
 - **n_repeats**: 8-bit input specifying the number of times to repeat the pattern.
 - **prbs_out**: 8-bit output PRBS sequence.
+   
+#### Internal Registers:
+- **pattern_counter**: Count the patterns to reach **n_repeats**.
+- **byte_counter**: Count the 4 Bytes for every pattern.
+
 
 ### Pattern Detector
 
@@ -73,6 +77,7 @@ The top module integrates the PRBS-15 block and the Pattern Detector. It connect
 - **n_repeats**: 8-bit input specifying the number of repeats.
 - **pattern_found**: Output flag indicating if the pattern was detected.
 
+![Alt diagram](diagram.png)
 ## Testbenches
 
 Testbenches are provided for:
@@ -80,8 +85,4 @@ Testbenches are provided for:
 2. **Pattern Detector**: Tests whether the detector correctly identifies patterns.
 3. **Top Module**: Verifies the integration of the PRBS-15 and Pattern Detector blocks.
 
-## Download
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/mgma10/fpga-prbs-pattern-detector.git
+![Alt Wave](TB.png)
