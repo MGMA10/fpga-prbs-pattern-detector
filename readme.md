@@ -20,6 +20,12 @@ This project provides an FPGA-targeted design in Verilog, containing:
 - A pattern detector block that identifies when a specific pattern repeats correctly n times.
 - A serial-to-parallel module to handle resource limitations on the FPGA.
 
+**Expected Wave Form in Success Case**
+![Waveform](wavedrom.svg)
+
+**Expected Wave Form in failed Case**
+![Waveform](wavedrom1.svg)
+
 ## Deliverables
 
 1. **Custom PRBS-15 Block**:
