@@ -8,6 +8,7 @@ module PRBS_15 (
 
     reg [7:0] pattern_counter;  
     reg [1:0] byte_counter;
+    reg [7:0] repeats;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n || n_repeats == 0) 
@@ -16,10 +17,11 @@ module PRBS_15 (
             pattern_counter <= 0;
             prbs_out <= 0;
             byte_counter <= 0;
+            repeats <= n_repeats;
             end 
         else 
             begin
-                if(pattern_counter < n_repeats)
+                if(pattern_counter < repeats)
                 begin
                     case (byte_counter)
                         0: prbs_out <= pattern_in[31:24];
@@ -37,7 +39,7 @@ module PRBS_15 (
                         end
                 end
                 else
-                if (byte_counter < 2'b11) begin
+                if (byte_counter == 2'b11) begin
                     prbs_out <= {prbs_out[6:0],pattern_in[13]^pattern_in[14]};
                     byte_counter <= byte_counter+1;
                 end

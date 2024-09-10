@@ -10,6 +10,7 @@ module Pattern_Detector (
     reg [7:0] pattern_counter ; 
     reg [1:0] byte_counter;
     reg [1:0] current_state, next_state;
+    reg [7:0] repeats;
 
     localparam IDLE = 2'b00,
                MATCHING = 2'b01,
@@ -30,6 +31,7 @@ module Pattern_Detector (
 always @(*) begin
     case (current_state)
         IDLE:  begin
+            repeats = n_repeats;
             if (data_in == pattern[31:24]) begin
                 pattern_counter  = 1;
                 byte_counter=1;
@@ -54,7 +56,7 @@ always @(*) begin
             else if (data_in == pattern[7:0] && byte_counter == 3) begin
                 byte_counter =0;
                 pattern_counter   = pattern_counter  + 1;
-                if (pattern_counter  > n_repeats) 
+                if (pattern_counter  > repeats) 
                 begin
                     pattern_found  = 1;
                     next_state  = FOUND;
