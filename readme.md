@@ -47,6 +47,9 @@ This project provides an FPGA-targeted design in Verilog, containing:
 5. **Testbenches**:
    - Provided for each block and the top-level module to validate the functionality.
 
+6. **Bitstream**:
+   -The overall system is synthesized and implemented on the target FPGA using Xilinx Vivado.
+
 ## Design Overview
 
 ### PRBS-15 Block
