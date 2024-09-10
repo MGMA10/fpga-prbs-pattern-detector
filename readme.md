@@ -47,7 +47,11 @@ This project provides an FPGA-targeted design in Verilog, containing:
 5. **Testbenches**:
    - Provided for each block and the top-level module to validate the functionality.
 
-6. **Bitstream**:
+6. **Constraint File FPGA**
+   - constraints that your board places on designs using it 
+   - specific interfaces wired up to specific pins.
+
+7. **Bitstream**:
    - The overall system is synthesized and implemented on the target FPGA using Xilinx Vivado.
 
 ## Design Overview
@@ -177,5 +181,27 @@ For FPGA deployment, the bitstream generation includes the following considerati
 - A **serial-to-parallel converter** is introduced to handle 8-bit serial inputs in environments with limited resources.
 - The overall system is synthesized and implemented on the target FPGA using Xilinx Vivado.
   
+**Block diagram**
 
+  ![Waveform](1.jpg)
+
+**Synthesis**
+
+  ![Waveform](2.jpg)
+
+**Timing Analysis Results**
+
+  ![Waveform](3.jpg)
+
+**Power analysis**
+
+  ![Waveform](4.jpg)
+
+**Placement**
+
+  ![Waveform](5.jpg)
+
+**Utilization**
+
+  ![Waveform](6.jpg)
 --- 
